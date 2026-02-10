@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useStore } from './store';
 
 import { WorkspaceView } from './views/WorkspaceView';
@@ -6,7 +7,11 @@ import { GanttView } from './views/GanttView';
 import { TasksView } from './views/TasksView';
 
 function App() {
-  const { activeTab, setActiveTab } = useStore();
+  const { activeTab, setActiveTab, fetchData, isLoading } = useStore();
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const renderContent = () => {
     switch (activeTab) {
@@ -74,7 +79,11 @@ function App() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto">
-        {renderContent()}
+        {isLoading ? (
+          <div className="flex items-center justify-center p-20">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+          </div>
+        ) : renderContent()}
       </main>
     </div>
   );
